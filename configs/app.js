@@ -34,8 +34,8 @@ app.use(express.text())
 app.use(bodyParser.json())
 app.use(compression())
 app.use(express.json())
-/* app.use(helmet());
-app.use(bodyParser.urlencoded({extended: false})); */
+// app.use(helmet());
+// app.use(bodyParser.urlencoded({extended: false}));
 /* app.use(cors({
     origin: '*', // Permitir solicitudes desde cualquier origen
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
