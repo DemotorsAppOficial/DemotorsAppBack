@@ -53,7 +53,7 @@ exports.getImagesReportEquipment = async (req, res) => {
   try {
     const pool = await sql.connect(config)
     const result = await pool.request()
-      .input('id_client', sql.Int, idClient)
+      .input('idClient', sql.Int, idClient)
       .input('no_serie', sql.VarChar, noSerie)
       .input('start_date', sql.VarChar, startDate)
       .input('end_date', sql.VarChar, endDate)
@@ -69,10 +69,14 @@ exports.getImagesReportEquipment = async (req, res) => {
           AND ces.DESCRIPTION_SERIE = @no_serie
           AND cc.ENTRY_DATE BETWEEN CONVERT(datetime, @start_date, 21) AND CONVERT(datetime, @end_date, 21)
       `)
-    res.status(200).json({
-      response: result.recordset
-    })
-  } catch (e) {
+      if (result.recordset && result.recordset.length > 0) {
+        dataImagenes = result.recordset.map((item) => ({
+          NOMBRE_IMAGEN: `http://localhost:3200/api/image/static/${item.NAME_PATH}`
+        }))
+      }
+  
+    res.status(200).json({ response: dataImagenes })
+  } catch (err) {
     console.log(err)
     res.status(500).json({
       status: 'ERROR',
